@@ -1,34 +1,29 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import soundsLibrary from "./Sounds"
 
 function App() {
-  const [count, setCount] = useState(0)
+  const sounds = soundsLibrary;
+  
+  const soundsElements = sounds.map(soundElement => {
+    return (
+      <button key={soundElement.name} name={soundElement.name} onClick={playSound}>{soundElement.name}</button>
+    )
+  })
+
+  function playSound(event){
+    const buttonName = event.target.name;
+    const sound = sounds.find(sound => sound.name === event.target.name)
+    sound.path.play()
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div id="drum-machine">
+      {soundsElements}
+      <div id="display">
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </div>
+    
   )
 }
 
