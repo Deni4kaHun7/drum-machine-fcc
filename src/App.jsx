@@ -4,10 +4,11 @@ import soundsLibrary from "./Sounds"
 
 function App() {
   const sounds = soundsLibrary;
+  const [displayText, setDisplayText] = useState("")
   
   const soundsElements = sounds.map(soundElement => {
     return (
-      <button className="drum-pad" key={soundElement.name} id={soundElement.name} onClick={playSound}>
+      <button className="drum-pad" key={soundElement.name} id={soundElement.name} onClick={() => playSound(soundElement.key)}>
         <audio className="clip" id={soundElement.key} src={soundElement.path}></audio>
         {soundElement.key}
         </button>
@@ -16,25 +17,13 @@ function App() {
 
   useEffect(() => {
     document.addEventListener("keydown", (event) => {
-      const pressedKey = event.key.toUpperCase();
-      const sound = sounds.find(sound => sound.key === pressedKey);
-      
-      if (sound){
-        const buttonElement = document.querySelector(`#${sound.name}`);
-        const audioElement = buttonElement.querySelector('.clip');
-        const displayElement = document.querySelector("#display");
-        displayElement.innerText = sound.key;
-        audioElement.play();
-      }else {
-        return;
-      }
+      playSound(event.key.toUpperCase())
     })
   }, [])
 
-  function playSound(event){
-    const audioElement = event.target.querySelector('.clip');
-    const displayElement = document.querySelector("#display");
-    displayElement.innerText = audioElement.id;
+  function playSound(audioElementId){
+    const audioElement = document.getElementById(audioElementId);
+    setDisplayText(audioElementId)
     audioElement.play()
   }
 
@@ -42,6 +31,7 @@ function App() {
     <div id="drum-machine">
       {soundsElements}
       <div id="display">
+        {displayText}
       </div>
     </div>
     
